@@ -1,0 +1,54 @@
+body, * {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    max-height: 100vh;
+}
+
+#test1 {
+    min-height: 100vh;
+    background-color: #777;
+    background-image: url('./gifs/apartment.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+
+    position: relative;
+}
+
+/*#test1 .ground {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 20%;
+
+    background-color: #524cc6;
+}*/
+
+#test1 .entity {
+    position: absolute;
+
+    height: 400px;
+    width: 400px;
+    /*border-radius: 100%;
+    background: #39c695;*/
+    /*background-image: url('./gifs/walk.gif');*/
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#test1 .entity[data-idle=true] {
+    background-image: url('./gifs/idle.png');
+}
+#test1 .entity[data-idle=false] {
+    background-image: url('./gifs/walk.gif');
+}
+#test1 .entity[data-state=left] {
+
+}
+#test1 .entity[data-state=right] {
+    transform: rotateY(180deg);
+}
