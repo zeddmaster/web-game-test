@@ -66,6 +66,10 @@ class MovingEntity {
         this.target = target;
         this.speedX = 0;
         this.speedY = 0;
+
+        // for collisions
+        this.height = 400;
+        this.width = 400;
     }
 
     #getCurrentPos(){
@@ -81,7 +85,7 @@ class MovingEntity {
         this.target.style.top = currentPos.y + this.speedY + 'px';
 
         let dirX = 0,
-            dirY = 0;
+            dirY = 0 + this.gravityFactor();
 
         if(this.handling.activeKeys.includes('KeyA'))
             dirX += 1
@@ -95,6 +99,10 @@ class MovingEntity {
         this.speedX = dirX || Math.abs(this.speedX) > .5 ? (this.speedX + (dirX * 10 + this.speedX) * -.1) : 0
         this.speedY = dirY || Math.abs(this.speedY) > .5 ? (this.speedY + (dirY * 10 + this.speedY) * -.1) : 0
 
+        // debug
+        document.querySelector('#debug input[name="speedX"]').value = this.speedX
+        document.querySelector('#debug input[name="speedY"]').value = this.speedY
+
 
         // animations
         if(this.speedX > 0){
@@ -106,6 +114,68 @@ class MovingEntity {
 
         this.target.setAttribute('data-idle', !this.speedX ? 'true' : 'false')
 
+    }
 
+    gravityFactor (){
+        const collisionsData = this.collisions()
+        document.querySelector('textarea').value = JSON.stringify(collisionsData, null, 2)
+        return collisionsData.bottom ? 0 : -.3;
+    }
+
+    collisions(){
+
+        const data = {
+            top: false,
+            bottom: false,
+            right: false,
+            left: false,
+        }
+
+        const scene = document.getElementById('test1')
+        const coords = this.#getCurrentPos()
+
+        const elements = [... scene.querySelectorAll('div')]
+
+        elements.forEach(el => {
+            if(el === this.target)
+                return;
+
+            const item = {
+                y: el.offsetTop,
+                x: el.offsetLeft,
+                height: el.offsetHeight,
+                width: el.offsetWidth
+            }
+
+            /*const bounds = {
+                bottom: coords.y + this.height >= item.y && coords.y + this.height <= item.y + item.height,
+                top: coords.y <= item.y + item.height && coords.y >= item.y,
+                right: coords.x + this.width >= item.x && coords.x + this.width <= item.x + item.width,
+                left: coords.x <= item.x + item.width && coords.x >= item.x
+            }
+
+            data.bottom = !data.bottom && bounds.bottom && (bounds.left || bounds.right)
+            data.top = !data.top && bounds.top && (bounds.left || bounds.right)
+            data.right = !data.right && bounds.right && (bounds.top || bounds.bottom)
+            data.left = !data.left && bounds.left && (bounds.top || bounds.bottom)*/
+
+            // 1. понять, что таргет в области препятствия
+            // 2. рассчитать, с какой стороны препятствие
+
+            const bounds = {
+                bottom: coords.y + this.height >= item.y && coords.y + this.height <= item.y + item.height,
+                top: coords.y <= item.y + item.height && coords.y >= item.y,
+                right: coords.x + this.width >= item.x && coords.x + this.width <= item.x + item.width,
+                left: coords.x <= item.x + item.width && coords.x >= item.x
+            }
+
+            data.bottom = !data.bottom && bounds.bottom && (bounds.left || bounds.right)
+            data.top = !data.top && bounds.top && (bounds.left || bounds.right)
+            data.right = !data.right && bounds.right && (bounds.top || bounds.bottom)
+            data.left = !data.left && bounds.left && (bounds.top || bounds.bottom)
+
+        })
+
+        return data;
     }
 }
