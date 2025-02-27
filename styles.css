@@ -46,12 +46,13 @@ body {
 #test1 .entity {
     position: absolute;
 
-    height: 400px;
-    width: 400px;
+    height: 250px;
+    width: 250px;
     /*border-radius: 100%;
     background: #39c695;*/
     /*background-image: url('./gifs/walk.gif');*/
-    background-size: contain;
+    background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
     border: 1px solid #39c695;
 }

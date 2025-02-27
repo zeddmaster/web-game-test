@@ -68,8 +68,8 @@ class MovingEntity {
         this.speedY = 0;
 
         // for collisions
-        this.height = 400;
-        this.width = 400;
+        this.height = target.offsetHeight;
+        this.width = target.offsetWidth;
     }
 
     #getCurrentPos(){
