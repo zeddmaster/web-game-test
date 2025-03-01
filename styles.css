@@ -46,28 +46,40 @@ body {
 #test1 .entity {
     position: absolute;
 
-    height: 250px;
+    height: 200px;
     width: 250px;
+    border: 3px solid #19e29a;
+}
+
+#test1 .entity .character {
     /*border-radius: 100%;
     background: #39c695;*/
     /*background-image: url('./gifs/walk.gif');*/
+    position: absolute;
+    height: 300px;
+    width: 300px;
+
+    top: calc(50% - 30px);
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    border: 1px solid #39c695;
 }
 
-#test1 .entity[data-idle=true] {
+#test1 .entity[data-idle=true]  .character{
     background-image: url('./gifs/idle.png');
 }
-#test1 .entity[data-idle=false] {
+#test1 .entity[data-idle=false] .character {
     background-image: url('./gifs/walk.gif');
 }
-#test1 .entity[data-state=left] {
+#test1 .entity[data-state=left] .character {
 
 }
-#test1 .entity[data-state=right] {
-    transform: rotateY(180deg);
+#test1 .entity[data-state=right] .character {
+    transform: translate(-50%, -50%) rotateY(180deg);
 }
 
 #test1 .ground {

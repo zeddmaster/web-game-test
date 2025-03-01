@@ -155,7 +155,7 @@ class MovingEntity {
         const scene = document.getElementById('test1')
         const coords = this.#getCurrentPos()
 
-        const elements = [... scene.querySelectorAll('div')]
+        const elements = [... scene.querySelectorAll('.let')]
 
         elements.forEach(el => {
             if(el === this.target)
@@ -167,33 +167,6 @@ class MovingEntity {
                 height: el.offsetHeight,
                 width: el.offsetWidth
             }
-
-            /*const bounds = {
-                bottom: coords.y + this.height >= item.y && coords.y + this.height <= item.y + item.height,
-                top: coords.y <= item.y + item.height && coords.y >= item.y,
-                right: coords.x + this.width >= item.x && coords.x + this.width <= item.x + item.width,
-                left: coords.x <= item.x + item.width && coords.x >= item.x
-            }
-
-            data.bottom = !data.bottom && bounds.bottom && (bounds.left || bounds.right)
-            data.top = !data.top && bounds.top && (bounds.left || bounds.right)
-            data.right = !data.right && bounds.right && (bounds.top || bounds.bottom)
-            data.left = !data.left && bounds.left && (bounds.top || bounds.bottom)*/
-
-            // 1. понять, что таргет в области препятствия
-            // 2. рассчитать, с какой стороны препятствие
-
-            /*const bounds = {
-                bottom: coords.y + this.height >= item.y && coords.y + this.height <= item.y + item.height,
-                top: coords.y <= item.y + item.height && coords.y >= item.y,
-                right: coords.x + this.width >= item.x && coords.x + this.width <= item.x + item.width,
-                left: coords.x <= item.x + item.width && coords.x >= item.x
-            }
-
-            data.bottom = !data.bottom && bounds.bottom && (bounds.left || bounds.right)
-            data.top = !data.top && bounds.top && (bounds.left || bounds.right)
-            data.right = !data.right && bounds.right && (bounds.top || bounds.bottom)
-            data.left = !data.left && bounds.left && (bounds.top || bounds.bottom)*/
 
             const offset = 10;
 
