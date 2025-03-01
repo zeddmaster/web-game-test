@@ -91,6 +91,7 @@ class MovingEntity {
          * 1. Speed Preprocessor (collisions)
          * 2. Gravity processor
          * 3. Speed Applier
+         * 4. Scroll camera
          */
 
         const collisions = this.collisions()
@@ -114,6 +115,15 @@ class MovingEntity {
         const currentPos = this.#getCurrentPos()
         this.target.style.left = currentPos.x + speedX + 'px';
         this.target.style.top = currentPos.y + speedY + 'px';
+
+
+        // 4. Scroll camera
+        window.scrollTo(
+            Math.max(currentPos.x - window.innerWidth / 2, 0),
+            Math.max(currentPos.y - window.innerHeight / 2, 0)
+        )
+
+
 
         let dirX = 0,
             dirY = 0;

@@ -9,7 +9,8 @@ body {
 }
 
 #test1 {
-    min-height: 100vh;
+    min-height: 130vh;
+    width: 3000px;
     background-color: #777;
     background-image: url('./gifs/apartment.jpg');
     background-repeat: no-repeat;
@@ -23,9 +24,18 @@ body {
     position: fixed;
     top: 20px;
     right: 20px;
-    background-color: rgba(255,255,255, .4);
+    background-color: rgba(0,0,0, .5);
+    color: #fff;
     padding: 15px;
+    border: 2px solid #fff;
+
+    opacity: .3;
 }
+
+#debug:hover{
+    opacity: 1;
+}
+
 
 #debug textarea {
     width: 100%;
@@ -48,7 +58,7 @@ body {
 
     height: 200px;
     width: 250px;
-    border: 3px solid #19e29a;
+    /*border: 3px solid #19e29a;*/
 }
 
 #test1 .entity .character {
@@ -88,6 +98,6 @@ body {
     width: 100%;
     left: 0;
     bottom: 0;
-    background-color: #242424;
+    /*background-color: #242424;*/
     opacity: .2;
 }
