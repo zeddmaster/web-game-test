@@ -88,13 +88,13 @@ class MovingEntity {
     render(){
 
         const collisions = this.collisions()
-        const gravityFactor = .5
+        const gravityFactor = .6
 
 
-        // calc speed X/Y
-        const speedY = this.speedY > 0 && collisions.bottom ? 0 :
-            this.speedY < 0 && collisions.top ? 0 : this.speedY + (collisions.bottom ? 0 : gravityFactor);
-        const speedX = this.speedX > 0 && collisions.right ? 0 :
+        // calc speed by collisions
+        let speedY = this.speedY > 0 && collisions.bottom ? 0 :
+            this.speedY < 0 && collisions.top ? 0 : this.speedY;
+        let speedX = this.speedX > 0 && collisions.right ? 0 :
             this.speedX < 0 && collisions.left ? 0 : this.speedX;
 
 
@@ -114,13 +114,15 @@ class MovingEntity {
         if(this.handling.activeKeys.includes('KeyS'))
             dirY -= 1
 
+        // speedY += gravityFactor
+
         this.speedX = dirX || Math.abs(speedX) > .5 ? (speedX + (dirX * 10 + speedX) * -.1) : 0
         this.speedY = dirY || Math.abs(speedY) > .5 ? (speedY + (dirY * 10 + speedY) * -.1) : 0
 
         // debug
         document.querySelector('#debug input[name="speedX"]').value = speedX
         document.querySelector('#debug input[name="speedY"]').value = speedY
-
+        document.querySelector('textarea').value = JSON.stringify(collisions, null, 2)
 
         // animations
         if(this.speedX > 0){
@@ -193,28 +195,42 @@ class MovingEntity {
             data.right = !data.right && bounds.right && (bounds.top || bounds.bottom)
             data.left = !data.left && bounds.left && (bounds.top || bounds.bottom)*/
 
+            const offset = 10;
 
             // bottom
             if(!data.bottom){
-                const left = this.#collisionPoint(
-                    [coords.x, coords.y + this.height],
-                    [item.x, item.y],
-                    [item.x + item.width, item.y + 50],
-                    0,
-                    3
-                )
+                const coordsB = [item.x, item.y],
+                      coordsC = [item.x + item.width, item.y];
 
-                const right = this.#collisionPoint(
-                    [coords.x + this.width, coords.y + this.height],
-                    [item.x, item.y],
-                    [item.x + item.width, item.y + 50],
-                    0,
-                    3
-                )
+                data.bottom = this.#collisionPoint([coords.x, coords.y + this.height], coordsB, coordsC, 0, offset)
+                           || this.#collisionPoint([coords.x + this.width, coords.y + this.height], coordsB, coordsC, 0, offset)
+            }
 
-                console.log(left, right)
+            // top
+            if(!data.top){
+                const coordsB = [item.x, item.y + item.height],
+                    coordsC = [item.x + item.width, item.y + item.height];
 
-                data.bottom = left || right
+                data.top = this.#collisionPoint([coords.x, coords.y], coordsB, coordsC, 0, offset * -1)
+                         || this.#collisionPoint([coords.x + this.width, coords.y], coordsB, coordsC, 0, offset * -1)
+            }
+
+            // left
+            if(!data.left){
+                const coordsB = [item.x + item.width, item.y],
+                    coordsC = [item.x + item.width, item.y + item.height];
+
+                data.left = this.#collisionPoint([coords.x, coords.y], coordsB, coordsC, offset * -1)
+                         || this.#collisionPoint([coords.x, coords.y + this.height], coordsB, coordsC, offset * -1)
+            }
+
+            // right
+            if(!data.right){
+                const coordsB = [item.x, item.y],
+                    coordsC = [item.x, item.y + item.height];
+
+                data.right = this.#collisionPoint([coords.x + this.width, coords.y], coordsB, coordsC, offset)
+                         || this.#collisionPoint([coords.x + this.width, coords.y + this.height], coordsB, coordsC, offset)
             }
 
         })

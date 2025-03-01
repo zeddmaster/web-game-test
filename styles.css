@@ -72,9 +72,9 @@ body {
 
 #test1 .ground {
     position: absolute;
-    bottom: 150px;
-    height: 40px;
-    width: 500px;
-    left: 45%;
+    bottom: 300px;
+    height: 200px;
+    width: 300px;
+    left: 40%;
     background-color: #242424;
 }
