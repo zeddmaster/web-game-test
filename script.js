@@ -182,7 +182,9 @@ class MovingEntity {
 
         // speedY += gravityFactor
 
-        this.speedX = dirX || Math.abs(speedX) > .5 ? (speedX + (dirX * 30 + speedX) * -.1) : 0
+        const hSpeedFactor = collisions.bottom ? 5 : 20;
+
+        this.speedX = dirX || Math.abs(speedX) > .5 ? (speedX + (dirX * hSpeedFactor + speedX) * -.1) : 0
         this.speedY = dirY || Math.abs(speedY) > .5 ? (speedY + (dirY * 10 + speedY) * -.1) : 0
 
         // debug

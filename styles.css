@@ -66,8 +66,8 @@ body {
     background: #39c695;*/
     /*background-image: url('./gifs/walk.gif');*/
     position: absolute;
-    height: 300px;
-    width: 300px;
+    height: 350px;
+    width: 430px;
 
     top: calc(50% - 30px);
     left: 50%;
@@ -84,7 +84,7 @@ body {
 }
 #test1 .entity[data-state*="idle"]  .character{
     background-image: url('assets/cat/idle.gif');
-    background-size: 75%;
+    background-size: 60%;
     margin-top: 15px;
 }
 #test1 .entity[data-state*="jump"] .character {
@@ -109,6 +109,6 @@ body {
     width: 100%;
     left: 0;
     bottom: 0;
-    /*background-color: #242424;*/
-    opacity: .2;
+    background-color: #242424;
+    opacity: .4;
 }
