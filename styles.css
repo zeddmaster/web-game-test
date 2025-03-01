@@ -12,7 +12,7 @@ body {
     min-height: 130vh;
     width: 3000px;
     background-color: #777;
-    background-image: url('./gifs/apartment.jpg');
+    background-image: url('assets/apartment.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -79,11 +79,22 @@ body {
     background-repeat: no-repeat;
 }
 
-#test1 .entity/*[data-state*="idle"]*/  .character{
-    background-image: url('./gifs/idle.png');
+#test1 .entity .character{
+    background-image: url('assets/cat/idle.png');
+}
+#test1 .entity[data-state*="idle"]  .character{
+    background-image: url('assets/cat/idle.gif');
+    background-size: 75%;
+    margin-top: 15px;
+}
+#test1 .entity[data-state*="jump"] .character {
+    background-image: url('assets/cat/jump.png');
+}
+#test1 .entity[data-state*="falling"] .character {
+    background-image: url('assets/cat/falling.png');
 }
 #test1 .entity[data-state*="walk"] .character {
-    background-image: url('./gifs/walk.gif');
+    background-image: url('assets/cat/walk.gif');
 }
 #test1 .entity[data-state*="left"] .character {
 
