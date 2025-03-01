@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&family=Press+Start+2P&display=swap');
+
 body, * {
     box-sizing: border-box;
 }
@@ -6,11 +8,14 @@ body {
     margin: 0;
     overflow: hidden;
     max-height: 100vh;
+
+    font-family: "Inter Tight", sans-serif;  /*"Press Start 2P", serif; #524cc6*/
+    color: #2b2d30;
 }
 
-#test1 {
-    min-height: 130vh;
-    width: 3000px;
+#scene {
+    min-height: 1100px;
+    min-width: calc(1100px * 4.5);
     background-color: #777;
     background-image: url('assets/apartment.jpg');
     background-repeat: no-repeat;
@@ -19,6 +24,13 @@ body {
 
     position: relative;
 }
+
+#scene:before{
+    content: '';
+    display: block;
+    padding-left: 450%;
+}
+
 
 #debug {
     position: fixed;
@@ -29,7 +41,7 @@ body {
     padding: 15px;
     border: 2px solid #fff;
 
-    opacity: .3;
+    opacity: .1;
 }
 
 #debug:hover{
@@ -44,7 +56,7 @@ body {
     height: 100px;
 }
 
-/*#test1 .ground {
+/*#scene .ground {
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -53,15 +65,16 @@ body {
     background-color: #524cc6;
 }*/
 
-#test1 .entity {
+#scene .entity {
     position: absolute;
 
     height: 200px;
     width: 250px;
+    z-index: 2;
     /*border: 3px solid #19e29a;*/
 }
 
-#test1 .entity .character {
+#scene .entity .character {
     /*border-radius: 100%;
     background: #39c695;*/
     /*background-image: url('./gifs/walk.gif');*/
@@ -79,36 +92,118 @@ body {
     background-repeat: no-repeat;
 }
 
-#test1 .entity .character{
-    background-image: url('assets/cat/idle.png');
+#scene .entity .character{
+    background-image: url('assets/cat/scratches/idle.png');
 }
-#test1 .entity[data-state*="idle"]  .character{
+#scene .entity[data-state*="idle"]  .character{
     background-image: url('assets/cat/idle.gif');
     background-size: 60%;
     margin-top: 15px;
 }
-#test1 .entity[data-state*="jump"] .character {
+#scene .entity[data-state*="jump"] .character {
     background-image: url('assets/cat/jump.png');
 }
-#test1 .entity[data-state*="falling"] .character {
+#scene .entity[data-state*="falling"] .character {
     background-image: url('assets/cat/falling.png');
 }
-#test1 .entity[data-state*="walk"] .character {
+#scene .entity[data-state*="walk"] .character {
     background-image: url('assets/cat/walk.gif');
 }
-#test1 .entity[data-state*="left"] .character {
+#scene .entity[data-state*="left"] .character {
 
 }
-#test1 .entity[data-state*="right"] .character {
+#scene .entity[data-state*="right"] .character {
     transform: translate(-50%, -50%) rotateY(180deg);
 }
 
-#test1 .ground {
+#scene .ground {
     position: absolute;
     height: 80px;
     width: 100%;
     left: 0;
     bottom: 0;
-    background-color: #242424;
-    opacity: .4;
+}
+
+#scene .let {
+    position: absolute;
+    /*background-color: #242424;
+    opacity: .4;*/
+}
+
+
+/* test form */
+section.test-form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+
+    z-index: 3;
+
+    position: absolute;
+
+    transition-property: opacity, transform;
+    transition-duration: 400ms;
+}
+
+section.test-form.hidden {
+    transform: translateY(15px);
+    opacity: 0;
+    pointer-events: none;
+}
+
+section.test-form.dark{
+    background-color: #232327;
+    color: #fff;
+}
+
+section.test-form > header{
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+section.test-form p{
+    opacity: .7;
+}
+section.test-form footer{
+    text-align: right;
+}
+section.test-form button{
+    background: #524cc6;
+    color: #fff;
+    padding: 4px 15px;
+    border: none;
+    border-radius: 7px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+
+    transition: transform 400ms;
+}
+
+section.test-form button:hover{
+    transform: scale(1.2);
+}
+
+
+/* loader */
+#loader{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+
+    background: #fff;
+    pointer-events: none;
+    transition: opacity 2s;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Press Start 2P", serif;
+}
+
+#loader.hidden {
+    opacity: 0;
 }

@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function(){
 
-    const element = document.querySelector('#test1 .entity')
+    const element = document.querySelector('#scene .entity')
 
     // bind key handling
     const handling = new HandlingRegister()
@@ -17,6 +17,65 @@ document.addEventListener('DOMContentLoaded', function(){
     function tick(frame){
         entity.render()
     }
+
+
+    // show test windows
+    window.addEventListener('scroll', (e) => {
+        requestAnimationFrame(() => {
+            const elements = [... document.querySelectorAll('section.test-form.hidden')]
+
+            for(const elem of elements){
+                if(window.scrollX + window.innerWidth * .6 >= elem.offsetLeft)
+                    elem.classList.remove('hidden');
+            }
+        })
+    })
+
+    // buttons
+    const buttons = document.querySelectorAll('button')
+    const messages = [
+        'Кнопки не работают, можешь не пытаться',
+        'Я ж говорю, не работают)',
+        'Dear user, the buttons do not work ⚠',
+        'Ну перестань, прекрати это делать',
+        'Доиграешься',
+        '...',
+        '',
+        '',
+        '',
+        '',
+        'Ну не работают кнопки емаЁ!',
+        'звоню в дурку...',
+        'за тобой уже выехали',
+        '😡😤😤',
+        'все, никаких больше кнопок',
+    ];
+
+    for(const btn of buttons){
+        btn.addEventListener('click', (e) => {
+
+            const i = +localStorage.getItem('btnMsgIndex') || 0
+
+            alert(messages[i])
+
+            if(messages[i + 1] === undefined){
+                for(const btn of buttons){
+                    btn.style.display = 'none';
+                }
+                return;
+            }
+
+            localStorage.setItem('btnMsgIndex', `${i+1}`)
+        })
+    }
+
+
+
+
+    // Hide loader
+    setTimeout(() => {
+        document.getElementById('loader').classList.add('hidden')
+    }, 1500)
 
 })
 
@@ -182,7 +241,7 @@ class MovingEntity {
 
         // speedY += gravityFactor
 
-        const hSpeedFactor = collisions.bottom ? 5 : 20;
+        const hSpeedFactor = collisions.bottom ? 8 : 20;
 
         this.speedX = dirX || Math.abs(speedX) > .5 ? (speedX + (dirX * hSpeedFactor + speedX) * -.1) : 0
         this.speedY = dirY || Math.abs(speedY) > .5 ? (speedY + (dirY * 10 + speedY) * -.1) : 0
@@ -243,7 +302,7 @@ class MovingEntity {
             left: false,
         }
 
-        const scene = document.getElementById('test1')
+        const scene = document.getElementById('scene')
         const coords = this.#getCurrentPos()
 
         const elements = [... scene.querySelectorAll('.let')]

@@ -8,14 +8,68 @@
 </head>
 <body>
 
-    <div id="test1">
+    <div id="loader">
+        <div class="text">loading...</div>
+    </div>
+
+    <main id="scene">
 
         <aside class="entity" style="top: 500px; left: 500px;">
             <div class="character"></div>
         </aside>
 
-        <div class="ground let" style="left: 0; top: 0; bottom: auto; width: 400px; height: 100%" data-offset="40"></div>
-        <div class="ground let" data-offset="40"></div>
+        <!-- limits -->
+        <div class="let" style="left: 0; top: 0; bottom: auto; width: 200px; height: 100%" data-offset="40"></div>
+        <div class="let" style="right: 0; top: 0; bottom: auto; width: 100px; height: 100%" data-offset="40"></div>
+        <div class="let ground top" style="bottom: auto; top: 0;" data-offset="40"></div>
+        <div class="let ground" data-offset="40"></div>
+
+
+        <!-- welcome message -->
+        <section class="test-form hidden" style="top: 450px; left: 200px;">
+            <header>
+                Welcome!
+            </header>
+            <p>
+                Зачем я это сделал? Просто ради удовольствия)
+            </p>
+            <p>
+                Кстати, кнопки не работают. Даже не пытайся
+            </p>
+            <footer>
+                <button>ок</button>
+            </footer>
+        </section>
+
+        <section class="test-form hidden" style="top: 550px; left: 1200px;">
+            <header>
+                Ещё...
+            </header>
+            <p>
+                А ещё решил потестить вот эти окошки.
+            </p>
+            <footer>
+                <button>ага</button>
+            </footer>
+        </section>
+
+        <section class="test-form hidden dark" style="top: 400px; left: 2500px; z-index: 0">
+            <header>
+                Тут пока пусто
+            </header>
+            <p>
+                Могу я просто рыбу-текст написать? Вам про лосося или карася? Вообще на самом деле я
+                равнодушен к рыбе, хотя иногда ее очень вкусно готовят.
+            </p>
+            <footer>
+                <button>кек</button>
+            </footer>
+        </section>
+
+
+        <section class="test-form hidden" style="top: 150px; left: 1800px;">
+            <img src="./assets/zeddmaster.svg" class="logo" alt="zeddmaster">
+        </section>
 
 
         <section id="debug">
@@ -29,7 +83,7 @@
             </p>
             <textarea name="collisions"></textarea>
         </section>
-    </div>
+    </main>
 
 
 
