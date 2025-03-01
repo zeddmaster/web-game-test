@@ -84,9 +84,10 @@ body {
 
 #test1 .ground {
     position: absolute;
-    bottom: 300px;
-    height: 200px;
-    width: 300px;
-    left: 40%;
+    height: 80px;
+    width: 100%;
+    left: 0;
+    bottom: 0;
     background-color: #242424;
+    opacity: .2;
 }

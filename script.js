@@ -87,10 +87,17 @@ class MovingEntity {
 
     render(){
 
+        /*
+         * 1. Speed Preprocessor (collisions)
+         * 2. Gravity processor
+         * 3. Speed Applier
+         */
+
         const collisions = this.collisions()
         const gravityFactor = .6
 
 
+        // 1. Speed preprocessor
         // calc speed by collisions
         let speedY = this.speedY > 0 && collisions.bottom ? 0 :
             this.speedY < 0 && collisions.top ? 0 : this.speedY;
@@ -98,6 +105,12 @@ class MovingEntity {
             this.speedX < 0 && collisions.left ? 0 : this.speedX;
 
 
+        // 2. Gravity processor
+        if(!collisions.bottom)
+            speedY += 2
+
+
+        // 3. Speed applier
         const currentPos = this.#getCurrentPos()
         this.target.style.left = currentPos.x + speedX + 'px';
         this.target.style.top = currentPos.y + speedY + 'px';
@@ -117,7 +130,7 @@ class MovingEntity {
         // speedY += gravityFactor
 
         this.speedX = dirX || Math.abs(speedX) > .5 ? (speedX + (dirX * 10 + speedX) * -.1) : 0
-        this.speedY = dirY || Math.abs(speedY) > .5 ? (speedY + (dirY * 10 + speedY) * -.1) : 0
+        this.speedY = dirY || Math.abs(speedY) > .5 ? (speedY + (dirY * 100 + speedY) * -.1) : 0
 
         // debug
         document.querySelector('#debug input[name="speedX"]').value = speedX
@@ -168,7 +181,7 @@ class MovingEntity {
                 width: el.offsetWidth
             }
 
-            const offset = 10;
+            const offset = el.dataset.offset || 10;
 
             // bottom
             if(!data.bottom){
