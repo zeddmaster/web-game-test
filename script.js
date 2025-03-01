@@ -57,6 +57,14 @@ class HandlingRegister {
 }
 
 
+/* CHARACTER STATES */
+const IDLE_STATE = 'idle'
+const WALK_STATE = 'walk'
+const FALLING_STATE = 'falling'
+const JUMP_STATE = 'jump'
+const RIGHT_STATE = 'right'
+const LEFT_STATE = 'left'
+
 
 
 class MovingEntity {
@@ -70,19 +78,29 @@ class MovingEntity {
         // for collisions
         this.height = target.offsetHeight;
         this.width = target.offsetWidth;
+
+        // states
+        this._states = [IDLE_STATE, RIGHT_STATE]
     }
 
+
+    set states(value) {
+        this._states = value
+
+        // update target
+        this.target.setAttribute('data-state', value.join(','))
+    }
+
+    get states() {
+        return this._states
+    }
+
+
     #getCurrentPos(){
-        const coords =  {
+        return {
             x: parseFloat(this.target.style.left || 0),
             y: parseFloat(this.target.style.top || 0),
-        }
-
-        /*coords.bounds = {
-            bottom: { l: []}
-        }*/
-
-        return coords;
+        };
     }
 
     render(){
@@ -95,7 +113,7 @@ class MovingEntity {
          */
 
         const collisions = this.collisions()
-        const gravityFactor = .6
+        const gravityFactor = 3
 
 
         // 1. Speed preprocessor
@@ -108,7 +126,7 @@ class MovingEntity {
 
         // 2. Gravity processor
         if(!collisions.bottom)
-            speedY += 2
+            speedY += gravityFactor
 
 
         // 3. Speed applier
@@ -119,28 +137,53 @@ class MovingEntity {
 
         // 4. Scroll camera
         window.scrollTo(
-            Math.max(currentPos.x - window.innerWidth / 2, 0),
-            Math.max(currentPos.y - window.innerHeight / 2, 0)
+            Math.max(currentPos.x - window.innerWidth / 2 - speedX, 0),
+            Math.max(currentPos.y - window.innerHeight / 2 - speedY, 0)
         )
-
 
 
         let dirX = 0,
             dirY = 0;
 
-        if(this.handling.activeKeys.includes('KeyA'))
+        if(this.handling.activeKeys.includes('KeyA')) {
             dirX += 1
-        if(this.handling.activeKeys.includes('KeyD'))
+            this.setState(LEFT_STATE)
+        }
+        if(this.handling.activeKeys.includes('KeyD')) {
             dirX -= 1
-        if(this.handling.activeKeys.includes('KeyW'))
-            dirY += 1
+            this.setState(RIGHT_STATE)
+        }
+        if(this.handling.activeKeys.includes('KeyW')) {
+            if(collisions.bottom)
+                dirY += 35
+            else if(speedY < -1)
+                dirY += (gravityFactor * .5)
+        }
+
         if(this.handling.activeKeys.includes('KeyS'))
-            dirY -= 1
+            dirY -= 3
+
+
+        // jumping
+        if(speedY < 0)
+            this.setState(JUMP_STATE)
+
+        // falling
+        else if(speedY > 0)
+            this.setState(FALLING_STATE)
+
+        // walking
+        else if(speedX !== 0)
+            this.setState(WALK_STATE)
+
+        else if(collisions.bottom)
+            this.setState(IDLE_STATE)
+
 
         // speedY += gravityFactor
 
-        this.speedX = dirX || Math.abs(speedX) > .5 ? (speedX + (dirX * 10 + speedX) * -.1) : 0
-        this.speedY = dirY || Math.abs(speedY) > .5 ? (speedY + (dirY * 100 + speedY) * -.1) : 0
+        this.speedX = dirX || Math.abs(speedX) > .5 ? (speedX + (dirX * 30 + speedX) * -.1) : 0
+        this.speedY = dirY || Math.abs(speedY) > .5 ? (speedY + (dirY * 10 + speedY) * -.1) : 0
 
         // debug
         document.querySelector('#debug input[name="speedX"]').value = speedX
@@ -148,23 +191,46 @@ class MovingEntity {
         document.querySelector('textarea').value = JSON.stringify(collisions, null, 2)
 
         // animations
-        if(this.speedX > 0){
+        /*if(this.speedX > 0){
             this.target.setAttribute('data-state', 'right')
         }
         else if(this.speedX < 0){
             this.target.setAttribute('data-state', 'left')
-        }
+        }*/
 
         this.target.setAttribute('data-idle', !this.speedX ? 'true' : 'false')
 
     }
 
-    gravityFactor (){
-        const collisionsData = this.collisions()
-        document.querySelector('textarea').value = JSON.stringify(collisionsData, null, 2)
 
-        return collisionsData.bottom ? 0 : -.3;
+    /**
+     * State logic
+     * @param state
+     */
+    setState(state) {
+        if (this.states.includes(state))
+            return;
+
+        if ([RIGHT_STATE, LEFT_STATE].includes(state)) {
+            const states = this.states.filter(s => ![RIGHT_STATE, LEFT_STATE].includes(s))
+            states.push(state)
+
+            this.states = states
+            return;
+        }
+
+        const states = this.states.filter(s => [RIGHT_STATE, LEFT_STATE].includes(s))
+        states.push(state)
+
+        this.states = states;
     }
+
+
+    hasState(state) {
+        return this.states.includes(state)
+    }
+
+
 
     collisions(){
 
@@ -235,21 +301,6 @@ class MovingEntity {
     }
 
 
-    /*
-     * А тут возможно нужно будет использовать точность по пикселям
-     * Но прикол в том, что нужно как-то задавать направление разброса
-     * мб ввести две переменные? только это не точность и не разброс, это смещение наверное? (offset)
-     *
-     * блин, а мне по идее нужно сравнивать две точки
-     * блин, а мне же нужно по трем точкам все это сравнивать.
-     * как будто бы определяем - находится ли точка внутри квадрата
-     *
-     * Ладна, вернуть попозже, потому что может отличаться направление offset и я пока
-     * не знаю как с этим работать
-     *
-     * coordsA/B = [x, y]
-     * @return Boolean
-     */
     #collisionPoint(coordsA, coordsB, coordsC, offsetX = 0, offsetY = 0){
         // console.log(coordsA, coordsB, coordsC)
         return this.#isBetween(coordsA[0], coordsB[0], coordsC[0] + offsetX) // x

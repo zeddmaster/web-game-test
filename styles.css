@@ -79,16 +79,16 @@ body {
     background-repeat: no-repeat;
 }
 
-#test1 .entity[data-idle=true]  .character{
+#test1 .entity/*[data-state*="idle"]*/  .character{
     background-image: url('./gifs/idle.png');
 }
-#test1 .entity[data-idle=false] .character {
+#test1 .entity[data-state*="walk"] .character {
     background-image: url('./gifs/walk.gif');
 }
-#test1 .entity[data-state=left] .character {
+#test1 .entity[data-state*="left"] .character {
 
 }
-#test1 .entity[data-state=right] .character {
+#test1 .entity[data-state*="right"] .character {
     transform: translate(-50%, -50%) rotateY(180deg);
 }
 
