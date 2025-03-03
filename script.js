@@ -113,6 +113,42 @@ class HandlingRegister {
         const i = this.activeKeys.indexOf(e.code)
         this.activeKeys.splice(i, 1)
     }
+
+    isLeft(){
+        const codes = ['ArrowLeft', 'Digit4', 'KeyA'];
+        for(const code of codes){
+            if(this.activeKeys.includes(code))
+                return true;
+        }
+        return false;
+    }
+
+    isRight(){
+        const codes = ['ArrowRight', 'Digit6', 'KeyD'];
+        for(const code of codes){
+            if(this.activeKeys.includes(code))
+                return true;
+        }
+        return false;
+    }
+
+    isDown(){
+        const codes = ['ArrowDown', 'Digit8', 'KeyS'];
+        for(const code of codes){
+            if(this.activeKeys.includes(code))
+                return true;
+        }
+        return false;
+    }
+    isUp(){
+        const codes = ['ArrowUp', 'Digit2', 'KeyW'];
+        for(const code of codes){
+            if(this.activeKeys.includes(code))
+                return true;
+        }
+        return false;
+    }
+
 }
 
 
@@ -204,22 +240,22 @@ class MovingEntity {
         let dirX = 0,
             dirY = 0;
 
-        if(this.handling.activeKeys.includes('KeyA')) {
+        if(this.handling.isLeft()) {
             dirX += 1
             this.setState(LEFT_STATE)
         }
-        if(this.handling.activeKeys.includes('KeyD')) {
+        if(this.handling.isRight()) {
             dirX -= 1
             this.setState(RIGHT_STATE)
         }
-        if(this.handling.activeKeys.includes('KeyW')) {
+        if(this.handling.isUp()) {
             if(collisions.bottom)
                 dirY += 35
             else if(speedY < -1)
                 dirY += (gravityFactor * .5)
         }
 
-        if(this.handling.activeKeys.includes('KeyS'))
+        if(this.handling.isDown())
             dirY -= 3
 
 
