@@ -1,57 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
 </head>
 <body>
-<canvas id="app" width="300" height="300" style="border: solid;"></canvas>
-<script>
-
-    function PressedKeysRegistry() {
-        this.handler = this.handler.bind(this);
-    }
-
-    PressedKeysRegistry.prototype = {
-        constructor: PressedKeysRegistry,
-        start: function() {
-            addEventListener("keydown", this.handler);
-            addEventListener("keyup", this.handler);
-        },
-        stop: function() {
-            removeEventListener("keydown", this.handler);
-            removeEventListener("keyup", this.handler);
-        },
-        handler: function(event) {
-            if(event.type === "keydown") {
-                if(this[event.code]) return;
-                this[event.code] = true;
-            } else if(event.type === "keyup") {
-                delete this[event.code];
-            }
-        }
-    };
-
-    // пример
-    var pressedKeys = new PressedKeysRegistry();
-    pressedKeys.start();
-    var player = { x: 50, y: 50 };
-    var field = { width: 100, height: 100 };
-    var ctx = app.getContext("2d");
-
-    (function loop() {
-        ctx.clearRect(0, 0, app.width, app.height);
-        ctx.fillRect(player.x / field.width * app.width, player.y / field.height * app.height, 20, 20);
-
-        if("KeyD" in pressedKeys) player.x++;
-        if("KeyA" in pressedKeys) player.x--;
-        if("KeyS" in pressedKeys) player.y++;
-        if("KeyW" in pressedKeys) player.y--;
-
-        setTimeout(loop, 50);
-    })();
-
-</script>
 
 </body>
 </html>

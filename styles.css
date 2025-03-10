@@ -41,11 +41,16 @@ body {
     padding: 15px;
     border: 2px solid #fff;
 
-    opacity: .1;
+    opacity: .3;
+    transform: scale(.1) translate(-100%, 100%);
+
+    transition-property: transform, opacity;
+    transition-duration: 1s;
 }
 
 #debug:hover{
     opacity: 1;
+    transform: scale(1);
 }
 
 

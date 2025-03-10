@@ -232,8 +232,8 @@ class MovingEntity {
 
         // 4. Scroll camera
         window.scrollTo(
-            Math.max(currentPos.x - window.innerWidth / 2 - speedX, 0),
-            Math.max(currentPos.y - window.innerHeight / 2 - speedY, 0)
+            Math.max(currentPos.x - window.innerWidth / 2 + this.width / 2 - speedX, 0),
+            Math.max(currentPos.y - window.innerHeight / 2 + this.height / 2 - speedY, 0)
         )
 
 
