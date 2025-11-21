@@ -8,74 +8,13 @@ document.addEventListener('DOMContentLoaded', function(){
 
     const entity = new MovingEntity(element, handling)
 
-    let count = 0
+    const FPS = 60;
+    let frame = 1;
 
     setInterval(() => {
-        requestAnimationFrame(() => tick(count++))
-    }, 25)
-
-    function tick(frame){
-        entity.render()
-    }
-
-
-    // show test windows
-    window.addEventListener('scroll', (e) => {
-        requestAnimationFrame(() => {
-            const elements = [... document.querySelectorAll('section.test-form.hidden')]
-
-            for(const elem of elements){
-                if(window.scrollX + window.innerWidth * .6 >= elem.offsetLeft)
-                    elem.classList.remove('hidden');
-            }
-        })
-    })
-
-    // buttons
-    const buttons = document.querySelectorAll('button')
-    const messages = [
-        'Кнопки не работают, можешь не пытаться',
-        'Я ж говорю, не работают)',
-        'Dear user, the buttons do not work ⚠',
-        'Ну перестань, прекрати это делать',
-        'Доиграешься',
-        '...',
-        '',
-        '',
-        '',
-        '',
-        'Ну не работают кнопки емаЁ!',
-        'звоню в дурку...',
-        'за тобой уже выехали',
-        '😡😤😤',
-        'все, никаких больше кнопок',
-    ];
-
-    for(const btn of buttons){
-        btn.addEventListener('click', (e) => {
-
-            const i = +localStorage.getItem('btnMsgIndex') || 0
-
-            alert(messages[i])
-
-            if(messages[i + 1] === undefined){
-                for(const btn of buttons){
-                    btn.style.display = 'none';
-                }
-                return;
-            }
-
-            localStorage.setItem('btnMsgIndex', `${i+1}`)
-        })
-    }
-
-
-
-
-    // Hide loader
-    setTimeout(() => {
-        document.getElementById('loader').classList.add('hidden')
-    }, 1500)
+        frame = frame + 1 > FPS ? 1 : frame + 1;
+        requestAnimationFrame(() => entity.render(frame));
+    }, 1000 / FPS)
 
 })
 
@@ -191,14 +130,17 @@ class MovingEntity {
     }
 
 
-    #getCurrentPos(){
+    #getCurrentPos() {
         return {
             x: parseFloat(this.target.style.left || 0),
             y: parseFloat(this.target.style.top || 0),
         };
     }
 
-    render(){
+    render(frame) {
+
+        console.log('render');
+        console.log(frame);
 
         /*
          * 1. Speed Preprocessor (collisions)
@@ -208,7 +150,7 @@ class MovingEntity {
          */
 
         const collisions = this.collisions()
-        const gravityFactor = 3
+        const gravityFactor = .5
 
 
         // 1. Speed preprocessor

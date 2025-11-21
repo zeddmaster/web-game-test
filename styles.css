@@ -77,6 +77,8 @@ body {
     width: 250px;
     z-index: 2;
     /*border: 3px solid #19e29a;*/
+
+    border: 1px solid blue;
 }
 
 #scene .entity .character {
@@ -133,6 +135,7 @@ body {
     position: absolute;
     /*background-color: #242424;
     opacity: .4;*/
+    border: 1px solid red;
 }
 
 
