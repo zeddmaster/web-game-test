@@ -139,9 +139,6 @@ class MovingEntity {
 
     render(frame) {
 
-        console.log('render');
-        console.log(frame);
-
         /*
          * 1. Speed Preprocessor (collisions)
          * 2. Gravity processor
@@ -150,7 +147,7 @@ class MovingEntity {
          */
 
         const collisions = this.collisions()
-        const gravityFactor = .5
+        const gravityFactor = 2
 
 
         // 1. Speed preprocessor
@@ -162,9 +159,9 @@ class MovingEntity {
 
 
         // 2. Gravity processor
-        if(!collisions.bottom)
+        if(!collisions.bottom) {
             speedY += gravityFactor
-
+        }
 
         // 3. Speed applier
         const currentPos = this.#getCurrentPos()
@@ -178,7 +175,8 @@ class MovingEntity {
             Math.max(currentPos.y - window.innerHeight / 2 + this.height / 2 - speedY, 0)
         )
 
-
+        // dirX и dirY - это сила применяемая на объект с помощью контроллера
+        // влияет на конечную скорость движения
         let dirX = 0,
             dirY = 0;
 
@@ -217,9 +215,7 @@ class MovingEntity {
             this.setState(IDLE_STATE)
 
 
-        // speedY += gravityFactor
-
-        const hSpeedFactor = collisions.bottom ? 8 : 20;
+        const hSpeedFactor = collisions.bottom ? 8 : 15;
 
         this.speedX = dirX || Math.abs(speedX) > .5 ? (speedX + (dirX * hSpeedFactor + speedX) * -.1) : 0
         this.speedY = dirY || Math.abs(speedY) > .5 ? (speedY + (dirY * 10 + speedY) * -.1) : 0
@@ -228,17 +224,6 @@ class MovingEntity {
         document.querySelector('#debug input[name="speedX"]').value = speedX
         document.querySelector('#debug input[name="speedY"]').value = speedY
         document.querySelector('textarea').value = JSON.stringify(collisions, null, 2)
-
-        // animations
-        /*if(this.speedX > 0){
-            this.target.setAttribute('data-state', 'right')
-        }
-        else if(this.speedX < 0){
-            this.target.setAttribute('data-state', 'left')
-        }*/
-
-        this.target.setAttribute('data-idle', !this.speedX ? 'true' : 'false')
-
     }
 
 
@@ -273,6 +258,8 @@ class MovingEntity {
 
     collisions(){
 
+
+        // todo: перевести в number для выталкивания
         const data = {
             top: false,
             bottom: false,
@@ -295,6 +282,17 @@ class MovingEntity {
                 height: el.offsetHeight,
                 width: el.offsetWidth
             }
+
+            // 1. AABB - быстрая проверка
+            const existsCollision = coords.x < item.x + item.width
+                                 && coords.x + this.width > item.x
+                                 && coords.y < item.y + item.height
+                                 && coords.y + this.height > item.y;
+
+            if(!existsCollision)
+                return;
+
+
 
             const offset = el.dataset.offset || 10;
 
