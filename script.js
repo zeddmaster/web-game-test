@@ -146,27 +146,27 @@ class MovingEntity {
          * 4. Scroll camera
          */
 
-        const collisions = this.collisions()
+        const {collisions, wall} = this.collisions()
         const gravityFactor = 2
 
 
         // 1. Speed preprocessor
-        // calc speed by collisions
-        let speedY = this.speedY > 0 && collisions.bottom ? 0 :
-            this.speedY < 0 && collisions.top ? 0 : this.speedY;
-        let speedX = this.speedX > 0 && collisions.right ? 0 :
-            this.speedX < 0 && collisions.left ? 0 : this.speedX;
+        // limit speed by walls
+        let speedY = this.speedY > 0 && wall.bottom ? 0 :
+            this.speedY < 0 && wall.top ? 0 : this.speedY;
+        let speedX = this.speedX > 0 && wall.right ? 0 :
+            this.speedX < 0 && wall.left ? 0 : this.speedX;
 
 
         // 2. Gravity processor
-        if(!collisions.bottom) {
+        if(!wall.bottom) {
             speedY += gravityFactor
         }
 
         // 3. Speed applier
         const currentPos = this.#getCurrentPos()
         this.target.style.left = currentPos.x + speedX + 'px';
-        this.target.style.top = currentPos.y + speedY + 'px';
+        this.target.style.top = currentPos.y + collisions.correctY + speedY + 'px';
 
 
         // 4. Scroll camera
@@ -189,7 +189,7 @@ class MovingEntity {
             this.setState(RIGHT_STATE)
         }
         if(this.handling.isUp()) {
-            if(collisions.bottom)
+            if(wall.bottom)
                 dirY += 35
             else if(speedY < -1)
                 dirY += (gravityFactor * .5)
@@ -211,11 +211,11 @@ class MovingEntity {
         else if(speedX !== 0)
             this.setState(WALK_STATE)
 
-        else if(collisions.bottom)
+        else if(wall.bottom)
             this.setState(IDLE_STATE)
 
 
-        const hSpeedFactor = collisions.bottom ? 8 : 15;
+        const hSpeedFactor = wall.bottom ? 8 : 15;
 
         this.speedX = dirX || Math.abs(speedX) > .5 ? (speedX + (dirX * hSpeedFactor + speedX) * -.1) : 0
         this.speedY = dirY || Math.abs(speedY) > .5 ? (speedY + (dirY * 10 + speedY) * -.1) : 0
@@ -223,7 +223,7 @@ class MovingEntity {
         // debug
         document.querySelector('#debug input[name="speedX"]').value = speedX
         document.querySelector('#debug input[name="speedY"]').value = speedY
-        document.querySelector('textarea').value = JSON.stringify(collisions, null, 2)
+        document.querySelector('textarea').value = JSON.stringify({collisions, wall}, null, 2)
     }
 
 
@@ -259,8 +259,13 @@ class MovingEntity {
     collisions(){
 
 
-        // todo: перевести в number для выталкивания
-        const data = {
+        // вектор корректировки
+        const collisions = {
+            correctY: 0,
+            correctX: 0
+        }
+
+        const wall = {
             top: false,
             bottom: false,
             right: false,
@@ -293,48 +298,54 @@ class MovingEntity {
                 return;
 
 
+            // collisions.correctX = ((coords.x + this.width / 2) - (item.x + item.width / 2)) / 2;
+            // collisions.correctY = ((coords.y + this.height / 2) - (item.y + item.height / 2)) / 2;
+            //
+            // console.log(collisions.correctY);
+
+            // todo: может быть это мне поможет - https://habr.com/ru/articles/336908/
 
             const offset = el.dataset.offset || 10;
 
             // bottom
-            if(!data.bottom){
+            if(!wall.bottom){
                 const coordsB = [item.x, item.y],
                       coordsC = [item.x + item.width, item.y];
 
-                data.bottom = this.#collisionPoint([coords.x, coords.y + this.height], coordsB, coordsC, 0, offset)
+                wall.bottom = this.#collisionPoint([coords.x, coords.y + this.height], coordsB, coordsC, 0, offset)
                            || this.#collisionPoint([coords.x + this.width, coords.y + this.height], coordsB, coordsC, 0, offset)
             }
 
             // top
-            if(!data.top){
+            if(!wall.top){
                 const coordsB = [item.x, item.y + item.height],
                     coordsC = [item.x + item.width, item.y + item.height];
 
-                data.top = this.#collisionPoint([coords.x, coords.y], coordsB, coordsC, 0, offset * -1)
+                wall.top = this.#collisionPoint([coords.x, coords.y], coordsB, coordsC, 0, offset * -1)
                          || this.#collisionPoint([coords.x + this.width, coords.y], coordsB, coordsC, 0, offset * -1)
             }
 
             // left
-            if(!data.left){
+            if(!wall.left){
                 const coordsB = [item.x + item.width, item.y],
                     coordsC = [item.x + item.width, item.y + item.height];
 
-                data.left = this.#collisionPoint([coords.x, coords.y], coordsB, coordsC, offset * -1)
+                wall.left = this.#collisionPoint([coords.x, coords.y], coordsB, coordsC, offset * -1)
                          || this.#collisionPoint([coords.x, coords.y + this.height], coordsB, coordsC, offset * -1)
             }
 
             // right
-            if(!data.right){
+            if(!wall.right){
                 const coordsB = [item.x, item.y],
                     coordsC = [item.x, item.y + item.height];
 
-                data.right = this.#collisionPoint([coords.x + this.width, coords.y], coordsB, coordsC, offset)
+                wall.right = this.#collisionPoint([coords.x + this.width, coords.y], coordsB, coordsC, offset)
                          || this.#collisionPoint([coords.x + this.width, coords.y + this.height], coordsB, coordsC, offset)
             }
 
         })
 
-        return data;
+        return { wall, collisions };
     }
 
 
