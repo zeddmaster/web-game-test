@@ -17,7 +17,7 @@ body {
     min-height: 1100px;
     min-width: calc(1100px * 4.5);
     background-color: #777;
-    background-image: url('assets/apartment.jpg');
+    background-image: url('../apartment.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -111,21 +111,21 @@ body {
 }
 
 #scene .entity .character{
-    background-image: url('assets/cat/scratches/idle.png');
+    background-image: url('../cat/scratches/idle.png');
 }
 #scene .entity[data-state*="idle"] .character{
-    background-image: url('assets/cat/idle.gif');
+    background-image: url('../cat/idle.gif');
     background-size: 60%;
     margin-top: 15px;
 }
 #scene .entity[data-state*="jump"] .character {
-    background-image: url('assets/cat/jump.png');
+    background-image: url('../cat/jump.png');
 }
 #scene .entity[data-state*="falling"] .character {
-    background-image: url('assets/cat/falling.png');
+    background-image: url('../cat/falling.png');
 }
 #scene .entity[data-state*="walk"] .character {
-    background-image: url('assets/cat/walk.gif');
+    background-image: url('../cat/walk.gif');
 }
 #scene .entity[data-state*="left"] .character {
 

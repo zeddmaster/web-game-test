@@ -165,7 +165,7 @@ class MovingEntity {
 
         // 3. Speed applier
         const currentPos = this.#getCurrentPos()
-        this.target.style.left = currentPos.x + speedX + 'px';
+        this.target.style.left = currentPos.x + collisions.correctX + speedX + 'px';
         this.target.style.top = currentPos.y + collisions.correctY + speedY + 'px';
 
 
@@ -298,16 +298,59 @@ class MovingEntity {
                 return;
 
 
+
             // collisions.correctX = ((coords.x + this.width / 2) - (item.x + item.width / 2)) / 2;
             // collisions.correctY = ((coords.y + this.height / 2) - (item.y + item.height / 2)) / 2;
             //
             // console.log(collisions.correctY);
 
+            const dy = (coords.y + this.height / 2) - (item.y + item.height / 2);
+            const dx = (coords.x + this.width / 2) - (item.x + item.width / 2)
+
+            if(Math.abs(dy) > 1){
+                if(dy < 0 && !wall.bottom) {
+                    console.log('преграда снизу');
+                    const collideSize = (coords.y + this.height - item.y) / 2;
+                    collisions.correctY = Math.abs(collideSize) > 1 ? collideSize * -1 : 0;
+
+                    wall.bottom = true;
+                }
+                if(dy > 0 && !wall.top) {
+                    console.log('преграда сверху')
+                    const collideSize = (item.y + item.height - coords.y) / 2
+                    collisions.correctY = Math.abs(collideSize) > 1 ? collideSize : 0;
+                    wall.top = true;
+                }
+            }
+
+            if(Math.abs(collisions.correctY) > 50) {
+                if(dx < 0 && !wall.right) {
+                    console.log('преграда справа');
+
+                    const collideSize = (coords.x + this.width - item.x) / 2;
+                    collisions.correctX = Math.abs(collideSize) > 1 ? collideSize * -1 : 0;
+
+                    wall.right = true;
+                }
+                if(dx > 0 && !wall.left) {
+                    console.log('преграда слева');
+
+                    const collideSize = (coords.x - (item.x + item.width)) / 2
+                    collisions.correctX = Math.abs(collideSize) > 1 ? collideSize * -1 : 0;
+
+                    wall.left = true;
+                }
+            }
+
+
+
+
+
             // todo: может быть это мне поможет - https://habr.com/ru/articles/336908/
 
             const offset = el.dataset.offset || 10;
 
-            // bottom
+            /*// bottom
             if(!wall.bottom){
                 const coordsB = [item.x, item.y],
                       coordsC = [item.x + item.width, item.y];
@@ -323,7 +366,7 @@ class MovingEntity {
 
                 wall.top = this.#collisionPoint([coords.x, coords.y], coordsB, coordsC, 0, offset * -1)
                          || this.#collisionPoint([coords.x + this.width, coords.y], coordsB, coordsC, 0, offset * -1)
-            }
+            }*/
 
             // left
             if(!wall.left){
