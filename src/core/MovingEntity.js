@@ -193,7 +193,7 @@ export class MovingEntity {
             if(el === this.target)
                 return;
 
-            el.style.background = 'blue';
+            // el.style.background = 'blue';
 
             /*const item = {
                 y: el.offsetTop,

@@ -219,32 +219,54 @@ section.test-form button:hover{
 
 .openedBox {
     position: absolute;
-    width: 400px;
-    height: 300px;
+    width: 500px;
+    height: 400px;
     border: 2px dashed blue;
 
     left: 1000px;
-    bottom: 80px;
+    bottom: 0;
+
+    .box-background-back, .box-background-front {
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .box-background-back {
+        background-image: url(/assets/box-1/box-1-back.webp);
+        z-index: 1;
+    }
+    .box-background-front {
+        background-image: url(/assets/box-1/box-1-front.webp);
+        z-index: 2;
+    }
 
     .left {
         position: absolute;
-        left: 0;
-        top: 0;
-        height: 100%;
+        left: 70px;
+        bottom: 0;
+        height: 50%;
         width: 25px;
     }
     .right {
         position: absolute;
-        right: 0;
-        top: 0;
-        height: 100%;
+        right: 80px;
+        bottom: 0;
+        height: 50%;
         width: 25px;
     }
     .bottom {
         position: absolute;
         bottom: 0;
         height: 25px;
-        width: 100%;
+        width: 200px;
+        left: 50%;
+        transform: translate(-50%);
     }
 
 }
