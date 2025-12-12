@@ -281,12 +281,15 @@ class MovingEntity {
             if(el === this.target)
                 return;
 
-            const item = {
+            el.style.background = 'blue';
+
+            /*const item = {
                 y: el.offsetTop,
                 x: el.offsetLeft,
                 height: el.offsetHeight,
                 width: el.offsetWidth
-            }
+            }*/
+            const item = this.getElemCoords(el);
 
             // 1. AABB - быстрая проверка
             const existsCollision = coords.x < item.x + item.width
@@ -294,97 +297,66 @@ class MovingEntity {
                                  && coords.y < item.y + item.height
                                  && coords.y + this.height > item.y;
 
-            if(!existsCollision)
+            if(!existsCollision) {
+                el.style.background = null;
                 return;
+            }
 
+            if(el.dataset.trigger) {
+                el.style.background = el.dataset.trigger
+                // console.log(el.dataset.trigger);
+            }
 
-
-            // collisions.correctX = ((coords.x + this.width / 2) - (item.x + item.width / 2)) / 2;
-            // collisions.correctY = ((coords.y + this.height / 2) - (item.y + item.height / 2)) / 2;
-            //
-            // console.log(collisions.correctY);
-
+            // 2. детальная проверка
             const dy = (coords.y + this.height / 2) - (item.y + item.height / 2);
             const dx = (coords.x + this.width / 2) - (item.x + item.width / 2)
 
+            let correctY = 0,
+                correctX = 0;
+
+            let wallBottom = false,
+                wallTop = false,
+                wallLeft = false,
+                wallRight = false;
+
             if(Math.abs(dy) > 1){
                 if(dy < 0 && !wall.bottom) {
-                    console.log('преграда снизу');
+                    // console.log('преграда снизу');
                     const collideSize = (coords.y + this.height - item.y) / 2;
-                    collisions.correctY = Math.abs(collideSize) > 1 ? collideSize * -1 : 0;
+                    correctY = Math.abs(collideSize) > 1 ? collideSize * -1 : 0;
 
-                    wall.bottom = true;
+                    wallBottom = true;
                 }
                 if(dy > 0 && !wall.top) {
-                    console.log('преграда сверху')
+                    // console.log('преграда сверху')
                     const collideSize = (item.y + item.height - coords.y) / 2
-                    collisions.correctY = Math.abs(collideSize) > 1 ? collideSize : 0;
-                    wall.top = true;
+                    correctY = Math.abs(collideSize) > 1 ? collideSize : 0;
+                    wallTop = true;
                 }
             }
 
-            if(Math.abs(collisions.correctY) > 50) {
+            if(Math.abs(dx) > 1) {
                 if(dx < 0 && !wall.right) {
-                    console.log('преграда справа');
-
+                    // console.log('преграда справа');
                     const collideSize = (coords.x + this.width - item.x) / 2;
-                    collisions.correctX = Math.abs(collideSize) > 1 ? collideSize * -1 : 0;
-
-                    wall.right = true;
+                    correctX = Math.abs(collideSize) > 1 ? collideSize * -1 : 0;
+                    wallRight = true;
                 }
                 if(dx > 0 && !wall.left) {
-                    console.log('преграда слева');
-
+                    // console.log('преграда слева');
                     const collideSize = (coords.x - (item.x + item.width)) / 2
-                    collisions.correctX = Math.abs(collideSize) > 1 ? collideSize * -1 : 0;
-
-                    wall.left = true;
+                    correctX = Math.abs(collideSize) > 1 ? collideSize * -1 : 0;
+                    wallLeft = true;
                 }
             }
 
+            collisions.correctY += Math.abs(correctX) > 10 ? correctY : 0;
+            collisions.correctX += Math.abs(correctY) > 20 ? correctX : 0;
 
-
-
-
-            // todo: может быть это мне поможет - https://habr.com/ru/articles/336908/
-
-            const offset = el.dataset.offset || 10;
-
-            /*// bottom
-            if(!wall.bottom){
-                const coordsB = [item.x, item.y],
-                      coordsC = [item.x + item.width, item.y];
-
-                wall.bottom = this.#collisionPoint([coords.x, coords.y + this.height], coordsB, coordsC, 0, offset)
-                           || this.#collisionPoint([coords.x + this.width, coords.y + this.height], coordsB, coordsC, 0, offset)
-            }
-
-            // top
-            if(!wall.top){
-                const coordsB = [item.x, item.y + item.height],
-                    coordsC = [item.x + item.width, item.y + item.height];
-
-                wall.top = this.#collisionPoint([coords.x, coords.y], coordsB, coordsC, 0, offset * -1)
-                         || this.#collisionPoint([coords.x + this.width, coords.y], coordsB, coordsC, 0, offset * -1)
-            }*/
-
-            // left
-            if(!wall.left){
-                const coordsB = [item.x + item.width, item.y],
-                    coordsC = [item.x + item.width, item.y + item.height];
-
-                wall.left = this.#collisionPoint([coords.x, coords.y], coordsB, coordsC, offset * -1)
-                         || this.#collisionPoint([coords.x, coords.y + this.height], coordsB, coordsC, offset * -1)
-            }
-
-            // right
-            if(!wall.right){
-                const coordsB = [item.x, item.y],
-                    coordsC = [item.x, item.y + item.height];
-
-                wall.right = this.#collisionPoint([coords.x + this.width, coords.y], coordsB, coordsC, offset)
-                         || this.#collisionPoint([coords.x + this.width, coords.y + this.height], coordsB, coordsC, offset)
-            }
+            wall.bottom = wall.bottom || wallBottom && Math.abs(correctX) > 10;
+            wall.top = wall.top || wallTop && Math.abs(correctX) > 10;
+            wall.left = wall.left || wallLeft && Math.abs(correctY) > 10;
+            wall.right = wall.right || wallRight && Math.abs(correctY) > 10;
 
         })
 
@@ -392,17 +364,16 @@ class MovingEntity {
     }
 
 
-    #collisionPoint(coordsA, coordsB, coordsC, offsetX = 0, offsetY = 0){
-        // console.log(coordsA, coordsB, coordsC)
-        return this.#isBetween(coordsA[0], coordsB[0], coordsC[0] + offsetX) // x
-            && this.#isBetween(coordsA[1], coordsB[1], coordsC[1] + offsetY) // y
+    getElemCoords(element) {
+        const elRect = element.getBoundingClientRect();
+
+        return {
+            height: elRect.height,
+            width: elRect.width,
+            x: elRect.left + window.scrollX,
+            y: elRect.top + window.scrollY
+        }
     }
 
-    #isBetween(value, a, b, inclusive = true) {
-        const min = Math.min(a, b),
-              max = Math.max(a, b);
-
-        return inclusive ? value >= min && value <= max : value > min && value < max;
-    }
 
 }

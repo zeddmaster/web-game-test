@@ -11,6 +11,7 @@ body {
 
     font-family: "Inter Tight", sans-serif;  /*"Press Start 2P", serif; #524cc6*/
     color: #2b2d30;
+    background-color: #312e2e;
 }
 
 #scene {
@@ -214,4 +215,36 @@ section.test-form button:hover{
 
 #loader.hidden {
     opacity: 0;
+}
+
+.openedBox {
+    position: absolute;
+    width: 400px;
+    height: 300px;
+    border: 2px dashed blue;
+
+    left: 1000px;
+    bottom: 80px;
+
+    .left {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 25px;
+    }
+    .right {
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        width: 25px;
+    }
+    .bottom {
+        position: absolute;
+        bottom: 0;
+        height: 25px;
+        width: 100%;
+    }
+
 }
