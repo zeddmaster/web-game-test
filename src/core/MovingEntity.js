@@ -1,96 +1,3 @@
-document.addEventListener('DOMContentLoaded', function(){
-
-    const element = document.querySelector('#scene .entity')
-
-    // bind key handling
-    const handling = new HandlingRegister()
-    handling.bind()
-
-    const entity = new MovingEntity(element, handling)
-
-    const FPS = 60;
-    let frame = 1;
-
-    setInterval(() => {
-        frame = frame + 1 > FPS ? 1 : frame + 1;
-        requestAnimationFrame(() => entity.render(frame));
-    }, 1000 / FPS)
-
-})
-
-
-class HandlingRegister {
-
-    activeKeys = []
-
-    #binds = {
-        'keydown': this.onKeyDown,
-        'keyup': this.onKeyUp,
-    }
-
-    bind(){
-        for(const type in this.#binds)
-            document.addEventListener(type, this.#binds[type].bind(this))
-    }
-
-    unbind(){
-        for(const type in this.#binds)
-            document.removeEventListener(type, this.#binds[type].bind(this))
-    }
-
-    onKeyDown(e){
-        if(!e.code || this.activeKeys.includes(e.code))
-            return;
-
-        this.activeKeys.push(e.code)
-    }
-
-    onKeyUp(e){
-        if(!e.code || !this.activeKeys.includes(e.code))
-            return;
-
-        const i = this.activeKeys.indexOf(e.code)
-        this.activeKeys.splice(i, 1)
-    }
-
-    isLeft(){
-        const codes = ['ArrowLeft', 'Digit4', 'KeyA'];
-        for(const code of codes){
-            if(this.activeKeys.includes(code))
-                return true;
-        }
-        return false;
-    }
-
-    isRight(){
-        const codes = ['ArrowRight', 'Digit6', 'KeyD'];
-        for(const code of codes){
-            if(this.activeKeys.includes(code))
-                return true;
-        }
-        return false;
-    }
-
-    isDown(){
-        const codes = ['ArrowDown', 'Digit8', 'KeyS'];
-        for(const code of codes){
-            if(this.activeKeys.includes(code))
-                return true;
-        }
-        return false;
-    }
-    isUp(){
-        const codes = ['ArrowUp', 'Digit2', 'KeyW'];
-        for(const code of codes){
-            if(this.activeKeys.includes(code))
-                return true;
-        }
-        return false;
-    }
-
-}
-
-
 /* CHARACTER STATES */
 const IDLE_STATE = 'idle'
 const WALK_STATE = 'walk'
@@ -101,8 +8,13 @@ const LEFT_STATE = 'left'
 
 
 
-class MovingEntity {
+export class MovingEntity {
 
+
+    /**
+     * @param target {HTMLElement}
+     * @param handling {HandlingRegister}
+     */
     constructor(target, handling) {
         this.handling = handling
         this.target = target;
@@ -293,9 +205,9 @@ class MovingEntity {
 
             // 1. AABB - быстрая проверка
             const existsCollision = coords.x < item.x + item.width
-                                 && coords.x + this.width > item.x
-                                 && coords.y < item.y + item.height
-                                 && coords.y + this.height > item.y;
+                && coords.x + this.width > item.x
+                && coords.y < item.y + item.height
+                && coords.y + this.height > item.y;
 
             if(!existsCollision) {
                 el.style.background = null;

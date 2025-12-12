@@ -1,6 +1,6 @@
-document.addEventListener('DOMContentLoaded', function() {
 
-	// show test windows
+export const useModals = () => {
+    // show test windows
     window.addEventListener('scroll', (e) => {
         requestAnimationFrame(() => {
             const elements = [... document.querySelectorAll('section.test-form.hidden')]
@@ -49,5 +49,4 @@ document.addEventListener('DOMContentLoaded', function() {
             localStorage.setItem('btnMsgIndex', `${i+1}`)
         })
     }
-
-});
+}
