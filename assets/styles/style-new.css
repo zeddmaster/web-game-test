@@ -33,44 +33,6 @@ body {
 }
 
 
-#debug {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background-color: rgba(0,0,0, .5);
-    color: #fff;
-    padding: 15px;
-    border: 2px solid #fff;
-
-    /*opacity: .3;*/
-    /*transform: scale(.1) translate(-100%, 100%);*/
-
-    transition-property: transform, opacity;
-    transition-duration: 1s;
-}
-
-#debug:hover{
-    opacity: 1;
-    transform: scale(1);
-}
-
-
-#debug textarea {
-    width: 100%;
-    max-width: 100%;
-
-    height: 100px;
-}
-
-/*#scene .ground {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 20%;
-
-    background-color: #524cc6;
-}*/
-
 #scene .entity {
     position: absolute;
 
@@ -137,6 +99,8 @@ body {
     /*background-color: #242424;
     opacity: .4;*/
     border: 1px solid red;
+
+    transition: all 500ms;
 }
 
 

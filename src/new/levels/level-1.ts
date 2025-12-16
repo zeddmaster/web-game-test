@@ -1,9 +1,19 @@
 import {Level} from "../Level.ts";
 import {Scene} from "../Scene.ts";
 import {BasicEntity} from "../entities/BasicEntity.ts";
+import {useDebugBox} from "../views/debug-box.view.ts";
+import {useSceneView} from "../views/scene-0.view.ts";
 
 
-const scene = new Scene(`<div id="scene"></div>`);
+const scene = new Scene(
+  useSceneView({
+    height: '1920px',
+    width: '8000px',
+    styles: {
+      // background: `url('/assets/apartment.jpg') no-repeat`
+    }
+  })
+);
 
 const entities = [
 
@@ -12,21 +22,38 @@ const entities = [
     .setPosition(300, 500)
     .setHeight(300)
     .setWidth(500)
-    .setTemplate('<div class="let">entity 1</div>'),
+    .setTemplate(
+      useDebugBox({
+        collisions: true,
+        styles: { borderColor: '#d14747' },
+      })
+    ),
 
 
   new BasicEntity()
     .setPosition(500, 700)
     .setHeight(200)
     .setWidth(600)
-    .setTemplate('<div class="let">entity 2</div>'),
+    .setTemplate(
+      useDebugBox({
+        collisions: true,
+        styles: { borderColor: '#11a995' },
+      })
+    ),
 
 
   new BasicEntity()
     .setPosition(1300, 700)
     .setHeight(350)
     .setWidth(600)
-    .setTemplate('<div class="let">entity 3</div>')
+    .setTemplate(
+      useDebugBox({
+        collisions: true,
+        styles: { borderColor: '#5b9ffa' },
+      })
+    ),
+
+
 
 ];
 

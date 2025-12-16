@@ -1,5 +1,6 @@
 import {AbstractEntity} from "./AbstractEntity.ts";
 import {Vector} from "../Vector.ts";
+import {renderTemplate} from "../views/core/template-render.ts";
 
 export class BasicEntity extends AbstractEntity
 {
@@ -8,19 +9,24 @@ export class BasicEntity extends AbstractEntity
   width: number = 0;
   template: any;
 
+  protected DOMElement?: Element;
+
   setPosition(x: number, y: number){
     this.position.x = x;
     this.position.y = y;
+    this.updateElementStyles();
     return this;
   }
 
   setHeight(height: number){
     this.height = height;
+    this.updateElementStyles();
     return this;
   }
 
   setWidth(width: number) {
     this.width = width;
+    this.updateElementStyles();
     return this;
   }
 
@@ -31,23 +37,23 @@ export class BasicEntity extends AbstractEntity
 
   render(): Element|null
   {
-    const template = document.createElement('template');
-    template.innerHTML = this.template.trim();
+    if(!this.DOMElement)
+      this.DOMElement = renderTemplate(this.template);
 
-    if(!template.content.firstElementChild)
-      throw new Error('Не удалось отрендерить объект');
+    this.updateElementStyles();
 
-    const entityElement = template.content.firstElementChild;
+    return this.DOMElement;
+  }
 
-    // init start position
-    if(entityElement instanceof HTMLElement) {
-      entityElement.style.top = `${this.position.y}px`;
-      entityElement.style.left = `${this.position.x}px`;
-      entityElement.style.height = `${this.height}px`;
-      entityElement.style.width = `${this.width}px`;
+
+  protected updateElementStyles(){
+    const element = this.DOMElement;
+    if(element instanceof HTMLElement) {
+      element.style.top = `${this.position.y}px`;
+      element.style.left = `${this.position.x}px`;
+      element.style.height = `${this.height}px`;
+      element.style.width = `${this.width}px`;
     }
-
-    return entityElement;
   }
 
 }

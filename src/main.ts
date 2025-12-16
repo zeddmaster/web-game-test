@@ -1,4 +1,24 @@
 import Level1 from "./new/levels/level-1.ts";
+import {BasicEntity} from "./new/entities/BasicEntity.ts";
+
+
+function getRootElement(){
+  const root = document.getElementById('root');
+  if(!root)
+    throw new Error('Cannot create launch without #root element');
+
+  return root;
+}
+
+
+function getRandomMinMax(min: number, max: number, double: boolean = false) {
+  const random = Math.random() * (max - min) + min;
+  if(double)
+    return random;
+
+  return Math.floor(random);
+}
+
 
 document.addEventListener('DOMContentLoaded', function(){
 
@@ -27,12 +47,32 @@ document.addEventListener('DOMContentLoaded', function(){
    *
    */
 
-  const root = document.getElementById('root');
-  if(!root) return;
+  try {
 
-  // get level
-  const level = Level1;
+    const root = getRootElement()
+    const level = Level1;
+    level.init();
+    root.append(level.getDOMElement());
 
-  root.append(level.render());
+
+    setInterval(() => {
+      const randomEntity = level.entities[getRandomMinMax(0, level.entities.length)]
+
+      if(randomEntity instanceof BasicEntity){
+        randomEntity.setPosition(
+          getRandomMinMax(0, 1920),
+          getRandomMinMax(0, 1080)
+        )
+          .setHeight(getRandomMinMax(100, 300))
+          .setWidth(getRandomMinMax(100, 300))
+      }
+    }, 1000);
+
+
+  } catch (e) {
+    console.error(e);
+  }
+
+
 
 })
