@@ -86,6 +86,37 @@ body {
     transform: translate(-50%, -50%) rotateY(180deg);
 }*/
 
+#scene .main-actor .character{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-image: url('../cat/scratches/idle.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 120%;
+    top: 20px;
+}
+#scene .main-actor[data-state*="idle"] .character{
+    background-image: url('../cat/idle.gif');
+    background-size: 100%;
+    /*margin-top: 15px;*/
+}
+#scene .main-actor[data-state*="jump"] .character {
+    background-image: url('../cat/jump.png');
+}
+#scene .main-actor[data-state*="falling"] .character {
+    background-image: url('../cat/falling.png');
+}
+#scene .main-actor[data-state*="walk"] .character {
+    background-image: url('../cat/walk.gif');
+}
+#scene .main-actor[data-state*="left"] .character {
+
+}
+#scene .main-actor[data-state*="right"] .character {
+    transform: rotateY(180deg);
+}
+
 #scene .ground {
     position: absolute;
     height: 80px;
@@ -98,9 +129,9 @@ body {
     position: absolute;
     /*background-color: #242424;
     opacity: .4;*/
-    border: 1px solid red;
+    /*border: 1px solid red;*/
 
-    transition: all 500ms;
+    /*transition: all 500ms;*/
 }
 
 

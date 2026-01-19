@@ -4,11 +4,11 @@ import {renderTemplate} from "../views/core/template-render.ts";
 
 export class BasicEntity extends AbstractEntity
 {
-  position = new Vector(0, 0);
-  height: number = 0;
-  width: number = 0;
-  template: any;
+  protected position = new Vector(0, 0);
+  protected height: number = 0;
+  protected width: number = 0;
 
+  protected template: any;
   protected DOMElement?: Element;
 
   setPosition(x: number, y: number){
@@ -35,14 +35,23 @@ export class BasicEntity extends AbstractEntity
     return this;
   }
 
-  render(): Element|null
+  init()
+  {
+    if(!this.DOMElement)
+      this.DOMElement = renderTemplate(this.template);
+  }
+
+  getDOMElement()
+  {
+    return this.DOMElement;
+  }
+
+  render(): void
   {
     if(!this.DOMElement)
       this.DOMElement = renderTemplate(this.template);
 
     this.updateElementStyles();
-
-    return this.DOMElement;
   }
 
 

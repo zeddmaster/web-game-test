@@ -37,3 +37,11 @@ export function useDebugBox2(options?: IDebugBoxOptions)  {
   return element;
 
 }
+
+
+export function useActorBox(options?: IDebugBoxOptions){
+  const element = useDebugBox(options);
+  element.innerHTML = `<div class="character"></div>`
+
+  return element;
+}
