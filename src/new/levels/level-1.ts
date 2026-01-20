@@ -111,6 +111,23 @@ export const makeLevel_1 = () => {
         })
       ),
 
+    new BasicEntity()
+      .setPosition(3300, 700)
+      .setHeight(100)
+      .setWidth(100)
+      .onTarget((ctx) => {
+        ctx.setPosition(3700, 400);
+      })
+      .setTemplate(
+        useDebugBox({
+          collisions: true,
+          styles: {
+            // position: 'absolute',
+            border: '1px solid red'
+          },
+        })
+      ),
+
     new MovableEntity()
       .setPosition(200, 400)
       .setHeight(200)

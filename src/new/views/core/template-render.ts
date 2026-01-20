@@ -1,7 +1,10 @@
 
-export function renderTemplate(template: string|Element): Element
+export function renderTemplate(template: string|Element, uuid?: string): Element
 {
   if(template instanceof Element){
+    if(uuid)
+      template.setAttribute('data-uuid', uuid);
+
     return template;
   }
 
@@ -11,5 +14,10 @@ export function renderTemplate(template: string|Element): Element
   if(!templateElem.content.firstElementChild)
     throw new Error('Не удалось отрендерить объект');
 
-  return templateElem.content.firstElementChild;
+  const element = templateElem.content.firstElementChild;
+
+  if(uuid)
+    element.setAttribute('data-uuid', uuid);
+
+  return element;
 }

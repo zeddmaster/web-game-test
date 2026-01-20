@@ -1,6 +1,7 @@
 import {BasicEntity} from "./BasicEntity.ts";
 import {EntityState} from "../enums/defaults.enum.ts";
 import type {HandlingRegister} from "../../core/HandlingRegister.ts";
+import {EventBus} from "../../core/EventBus.ts";
 
 export class MovableEntity extends BasicEntity {
 
@@ -134,10 +135,8 @@ export class MovableEntity extends BasicEntity {
     const elements: HTMLElement[] = [... scene.querySelectorAll('.let')]
 
     elements.forEach(el => {
-      if(el === this.DOMElement) {
-        console.log('skip');
+      if(el === this.DOMElement)
         return;
-      }
 
       // el.style.background = 'blue';
 
@@ -159,6 +158,9 @@ export class MovableEntity extends BasicEntity {
         // el.style.background = '';
         return;
       }
+
+      if(el.dataset.uuid)
+        EventBus.$emit(`target:${el.dataset.uuid}`)
 
       // if(el.dataset.trigger) {
       //   el.style.background = el.dataset.trigger
